@@ -1,0 +1,23 @@
+name: Deploy OpenFaaS Function
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up OpenFaaS
+        run: |
+          curl -sSL https://cli.openfaas.com | sh
+          faas-cli version
+
+      - name: Build and Deploy Function
+        run: |
+          faas-cli new my-function --lang=python
+          faas-cli up -f my-function.yml
